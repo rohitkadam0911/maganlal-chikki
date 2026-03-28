@@ -7,7 +7,7 @@ import { X } from 'lucide-react';
 import AddCartButton from './AddCartButton';
 
 const Allproducts = async ({ data, categoriesname, categoryimages, }) => {
-    
+     
     let products = [];
     try {
         const response = await axios.get(
