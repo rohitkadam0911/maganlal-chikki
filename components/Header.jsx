@@ -79,18 +79,20 @@ export default function Header() {
             className="w-5 sm:w-6 cursor-pointer"
           />
 
-          <img
-            src="/icon-wishlist.png"
-            className="w-7 sm:w-8 cursor-pointer"
-          />
+          <Link href="/wishlist">
+            <img
+              src="/icon-wishlist.png"
+              className="w-7 sm:w-8 cursor-pointer"
+            />
+          </Link>
 
           {/* ⭐ CART */}
-          
+
           <div className="flex items-center gap-2 cursor-pointer">
 
-            
+
             <div className="bg-red-500 text-white p-2 sm:p-3 rounded relative">
-              
+
               <Link href="/cart"><FaShoppingBag /></Link>
 
               {/* ⭐ Cart Count Bubble */}
