@@ -4,11 +4,26 @@ import Image from "next/image"
 import { FaShoppingBag } from "react-icons/fa"
 import { useState, useEffect } from "react"
 import { useCart } from "@/app/context/CartContext"
+import { useSearch } from "@/app/context/SearchContext"
 import Link from "next/link"
+import { FaRegHeart } from "react-icons/fa6";
+import { IoShuffleOutline } from "react-icons/io5";
+import { useWishlist } from "@/app/context/WishlistContext";
+
 
 export default function Header() {
 
-  const { totalQty, totalPrice } = useCart()   // ⭐ cart data
+    const wishlistContext = useWishlist();
+    const wishlist = wishlistContext?.wishlist || [];
+
+  const { totalQty, totalPrice } = useCart()
+
+  const {
+    search,
+    setSearch,
+    selectedCategory,
+    setSelectedCategory
+  } = useSearch()
 
   const [scrolled, setScrolled] = useState(false)
 
@@ -22,101 +37,79 @@ export default function Header() {
   }, [])
 
   return (
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur text-black">
 
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur text-black">
-
-      <div
-        className={`max-w-7xl mx-auto 
-        px-4 sm:px-6 lg:px-10
-        flex flex-col lg:flex-row 
-        items-center justify-between 
-        gap-3 transition-all duration-300
-        ${scrolled ? "py-2" : "py-4"}
-        `}
-      >
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row items-center justify-between gap-3 transition-all duration-300 ${scrolled ? "py-2" : "py-4"}`}>
 
         {/* LOGO */}
         <Image
           src="/web-logo-3.webp"
           alt="logo"
-          width={220}
-          height={75}
-          loading="eager"
-          style={{ width: "auto", height: "auto" }}
-          className={`transition-all duration-300 
-          ${scrolled ? "scale-90" : "scale-100"}
-          `}
+          width={scrolled ? 180 : 220}
+          height={scrolled ? 60 : 75}
+          priority
+          className="transition-all duration-300"
         />
 
-        {/* SEARCH */}
+        {/* SEARCH + CATEGORY */}
         <div className="flex w-full lg:w-[500px] border rounded overflow-hidden">
 
-          <select className="px-2 border-r text-xs sm:text-sm outline-none">
-            <option>All Categories</option>
-            <option>Chikki</option>
-            <option>Fudge</option>
-            <option>Dry Fruit Roll</option>
-            <option>Namkeens</option>
+          {/* ✅ CATEGORY DROPDOWN */}
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="px-2 border-r text-xs sm:text-sm outline-none"
+          >
+            <option value="">All Categories</option>
+            <option value="chikki">Chikki</option>
+            <option value="fudge">Fudge</option>
+            <option value="roll">Roll</option>
+            <option value="sev">Sev</option>
           </select>
 
+          {/* 🔍 SEARCH INPUT */}
           <input
             type="text"
             placeholder="Enter your keyword..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="flex-1 px-2 py-2 text-xs sm:text-sm outline-none"
           />
 
-          <button className="bg-red-500 hover:bg-red-600 text-white px-4 sm:px-4 text-xs sm:text-sm">
+          <button className="bg-red-500 text-white px-4 text-xs sm:text-sm">
             Search
           </button>
 
         </div>
 
-        {/* ICONS */}
-        <div className="flex items-center gap-3 sm:gap-5">
+        <div className="flex gap-5 text-2xl">
+          <Link href="/wishlist" className="relative">
+            <FaRegHeart />
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                    {wishlist.length}
+                  </span>
+          </Link>
+          <IoShuffleOutline />
+        </div>
 
-          <img
-            src="/shuffle-compare.png"
-            className="w-5 sm:w-6 cursor-pointer"
-          />
+        {/* CART */}
+        <div className="flex items-center gap-3">
 
-          <Link href="/wishlist">
-            <img
-              src="/icon-wishlist.png"
-              className="w-7 sm:w-8 cursor-pointer"
-            />
+          <Link href="/cart" className="bg-red-500 text-white p-3 rounded">
+            <FaShoppingBag />
           </Link>
 
-          {/* ⭐ CART */}
-
-          <div className="flex items-center gap-2 cursor-pointer">
-
-
-            <div className="bg-red-500 text-white p-2 sm:p-3 rounded relative">
-
-              <Link href="/cart"><FaShoppingBag /></Link>
-
-              {/* ⭐ Cart Count Bubble */}
-              {/* {totalQty > 0 && (
-                <span className="absolute -top-2 -right-5 bg-black text-white text-[10px] px-1.5 py-0.5 rounded-full">
-                  {totalQty}
-                </span>
-              )} */}
-            </div>
-
-            <div className="hidden sm:block">
-              <p className="text-sm font-semibold">My Cart</p>
-              <p className="text-xs text-gray-500">
-                {totalQty} Item(s) -
-                <span className="text-red-500"> ₹{totalPrice}</span>
-              </p>
-            </div>
-
+          <div className="hidden sm:block">
+            <p className="text-sm font-semibold">My Cart</p>
+            <p className="text-xs text-gray-500">
+              {totalQty || 0} Item(s) -
+              <span className="text-red-500"> ₹{totalPrice || 0}</span>
+            </p>
           </div>
 
         </div>
 
       </div>
     </header>
-
   )
 }

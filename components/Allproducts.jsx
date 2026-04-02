@@ -7,15 +7,18 @@ import Link from 'next/link'
 import { FaHeart } from "react-icons/fa"
 import toast from "react-hot-toast"
 import { useWishlist } from "@/app/context/WishlistContext"
+import { useSearch } from "@/app/context/SearchContext"
 
 const Allproducts = ({ data, categoriesname, categoryimages }) => {
 
   const [products, setProducts] = useState([])
+  const { setSelectedCategory } = useSearch()
 
-  // ✅ SAFE context (prevents crash)
   const wishlistContext = useWishlist()
   const wishlist = wishlistContext?.wishlist || []
   const addToWishlist = wishlistContext?.addToWishlist
+
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,6 +34,7 @@ const Allproducts = ({ data, categoriesname, categoryimages }) => {
 
     fetchProducts()
   }, [data.id])
+
 
   return (
     <div className='bg-gray-200 px-4 md:px-10 lg:px-12 py-0'>
@@ -62,12 +66,8 @@ const Allproducts = ({ data, categoriesname, categoryimages }) => {
               const exists = wishlist.some(p => p.id === item.id)
 
               return (
-                <div
-                  key={item.id}
-                  className="bg-white shadow rounded-lg overflow-hidden hover:shadow-xl transition flex flex-col"
-                >
+                <div key={item.id} className="bg-white shadow rounded-lg overflow-hidden hover:shadow-xl transition flex flex-col">
 
-                  {/* Image */}
                   <img
                     src={item.images}
                     alt={item.title}
@@ -86,7 +86,6 @@ const Allproducts = ({ data, categoriesname, categoryimages }) => {
 
                     <div className="flex gap-2 mt-3">
 
-                      {/* View */}
                       <Link
                         href={`/product/${item.id}/${data.id}`}
                         className="flex-1 text-sm text-center bg-gray-300 py-2 text-red-400 rounded hover:bg-[#e9597e] hover:text-white"
@@ -94,11 +93,8 @@ const Allproducts = ({ data, categoriesname, categoryimages }) => {
                         View
                       </Link>
 
-                      {/* ❤️ Wishlist */}
                       <div
                         onClick={() => {
-
-                          // ❌ If context not working
                           if (!addToWishlist) {
                             toast.error("Wishlist not ready ❌")
                             return
@@ -133,10 +129,12 @@ const Allproducts = ({ data, categoriesname, categoryimages }) => {
         </div>
       </div>
 
-      {/* Bottom Button */}
       <div className="flex justify-center py-10">
-        <button className="flex items-center gap-2 bg-white text-red-400 px-10 py-2 border rounded hover:bg-[#e9597e] hover:text-white">
-          View All {categoriesname} <AiFillCaretRight />
+        <button
+
+          className="flex items-center gap-2 bg-white text-red-400 px-10 py-2 border rounded hover:bg-[#e9597e] hover:text-white"
+        >
+          View All <AiFillCaretRight />
         </button>
       </div>
 
