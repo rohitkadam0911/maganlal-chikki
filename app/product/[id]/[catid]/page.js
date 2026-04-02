@@ -70,7 +70,7 @@ export default async function ProductPage({ params }) {
               <p className="text-green-600 font-bold">₹ {item.price}</p>
 
               <Link href={`/product/${item.id}/${catid}`}>
-                <button className="mt-2 bg-black text-white w-full py-2 rounded">
+                <button className="mt-2 bg-gray-200 text-black w-full py-2 rounded hover:bg-[#ff395c]">
                   View
                 </button>
               </Link>

@@ -114,9 +114,9 @@ export default function Footer() {
             Nangargaon, Lonavala 410401 Dist. Pune
           </p>
 
-          <p className="text-gray-600 text-sm flex items-center gap-2">
+          <h1 className="text-gray-600 text-sm flex items-center gap-2">
             <Phone size={16} /> +912114274060
-          </p>
+          </h1>
 
           <p className="text-gray-600 text-sm">
             Contact Time: 9 AM To 6 PM

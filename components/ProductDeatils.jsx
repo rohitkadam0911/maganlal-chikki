@@ -7,7 +7,7 @@ import { BsArrowLeft, BsFillCartPlusFill } from "react-icons/bs";
 async function getProduct(id) {
     try {
         const response = await axios.get(
-             `https://appy.trycatchtech.com/v3/maganlalchikki/product_list${id}`
+             `https://appy.trycatchtech.com/v3/maganlalchikki/product_list?category_id=${id}`
         );
 
         const products = Array.isArray(response.data)
